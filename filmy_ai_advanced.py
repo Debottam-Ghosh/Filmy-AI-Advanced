@@ -66,6 +66,11 @@ def get_poster(title):
             return poster
     return default_poster
 
+if st.button("Test OMDb API"):
+    test_title = "Inception"
+    poster = get_poster(test_title)
+    st.image(poster)
+
 
 if st.button("Recommend") and movie_info is not None:
     def recommend(movie):
