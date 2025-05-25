@@ -2,6 +2,7 @@ import streamlit as st
 import pickle
 import pandas as pd
 import requests
+from utils.file_loader import download_and_load_similarity
 
 # Load the movie_info DataFrame
 movies_info = pickle.load(open('movies_info.pkl', 'rb'))
@@ -11,32 +12,103 @@ movies_info = pd.DataFrame(movies_info)
 Top_Recommendations = pickle.load(open('Top_Recommendations.pkl', 'rb'))
 Top_Recommendations = pd.DataFrame(Top_Recommendations)
 
-# Load Similarity and create DataFrame
-similarity = pickle.load(open('similarity.pkl', 'rb'))
-similarity = pd.DataFrame(similarity)
+# Download and load the similarity matrix from Google Drive
+file_id = '1yyZFiRDEHimsXP8H_WOBpLpTIfSRrVJ-'
+similarity = download_and_load_similarity(file_id)
 
 # My OMDb API Key
 OMDB_API_KEY = "e8e2e5fc"
 
 # App title
-st.title(":red[Filmy] AI")
+st.markdown(
+    """
+    <p style='font-size:75px; font-weight:bold;'>
+        <span style='color:#FF0000;'>Filmy</span> <span style='color:#FFFFFF;'>AI</span> <span style='color:#282828;'>PRO</span>
+    </p>
+    """,
+    unsafe_allow_html=True
+)
+
+st.write(" ")
+
+st.markdown(
+    "<p style='color:#696969; font-size:35px; font-weight:bold;'>Choose the movie you like</p>",
+    unsafe_allow_html=True
+)
 
 # Dropdown to select movie
-selected_movie_name = st.selectbox("**Choose the movie you like**", movies_info['Series_Title'].unique())
+selected_movie_name = st.selectbox(
+    "",
+    ['Select a movie...'] + list(movies_info['movie_title'].unique())
+)
+
 
 # Get the selected movie's details
-movie_info = movies_info[movies_info['Series_Title'] == selected_movie_name].iloc[0]
+movie_info = None
+if selected_movie_name != 'Select a movie...':
+    filtered = movies_info[movies_info['movie_title'] == selected_movie_name]
+    if not filtered.empty:
+        movie_info = filtered.iloc[0]
+
 
 # Function to get poster from OMDb
 def get_poster(title):
+    # Correct raw GitHub link (ensure it's raw and publicly accessible)
+    default_poster = "https://raw.githubusercontent.com/Debottam-Ghosh/Filmy-AI-Advanced/main/Poster%20Unavailable.png"
+
     url = f"http://www.omdbapi.com/?t={title}&apikey={OMDB_API_KEY}"
     response = requests.get(url)
+
     if response.status_code == 200:
         data = response.json()
-        return data.get('Poster')  # Returns None if poster not available
-    return None
+        poster = data.get('Poster')
+        if poster and poster != "N/A":
+            return poster
+    return default_poster
 
-if st.button("Recommend"):
+
+if st.button("Recommend") and movie_info is not None:
+    def recommend(movie):
+        if movie not in Top_Recommendations['movie_title'].values:
+            print("Movie not found in dataset. Please try another one.")
+            return []
+
+        movie_index = Top_Recommendations[Top_Recommendations['movie_title'] == movie].index[0]
+        similarity_index = similarity[movie_index]
+        recommended_movies_list = sorted(list(enumerate(similarity_index)), reverse=True, key=lambda x: x[1])
+
+        # Filter for movies with the same actor and unique titles
+        top_list = []
+        seen_titles = set()
+
+        for i in recommended_movies_list:
+            idx = i[0]
+            movie_title = Top_Recommendations.iloc[idx]['movie_title']
+
+            if (
+                idx != movie_index and
+                movie_title != movie_info['movie_title'] and
+                movie_title not in seen_titles
+                ):
+                top_list.append(idx)
+                seen_titles.add(movie_title)
+
+            if len(top_list) >= 6:
+                break
+
+        recommended = []
+        for i in top_list:
+            movie_title = Top_Recommendations.iloc[i].movie_title
+            imdb_link = Top_Recommendations.iloc[i].movie_imdb_link
+            poster_url = get_poster(movie_title)
+            recommended.append({
+                "title": movie_title,
+                "link": imdb_link,
+                "poster": poster_url
+            })
+        return recommended
+
+
     # Get poster from OMDb
     poster_url = get_poster(selected_movie_name)
 
@@ -44,26 +116,38 @@ if st.button("Recommend"):
     col1, col2 = st.columns([1, 2])
 
     with col1:
+        st.write(" ")
         if poster_url and poster_url != "N/A":
             st.markdown(
                 f"""
-                <div style="border: 2pt solid white; display: inline-block;">
-                    <img src="{poster_url}" width="200" />
-                </div>
+                <style>
+                    .hover-large {{
+                        transition: transform 0.3s ease;
+                        width: 250px;
+                        height: 375px;
+                        object-fit: cover;
+                    }}
+                    .hover-large:hover {{
+                        transform: scale(1.05);
+                    }}
+                </style>
+
+                <a href="{movie_info['movie_imdb_link']}" target="_blank">
+                    <img src="{poster_url}" class="hover-large" />
+                </a>
                 """,
                 unsafe_allow_html=True
             )
-        else:
-            st.warning("Poster not available.")
 
     with col2:
-        st.markdown(f"## :red[**{movie_info['Series_Title']}**]")
-        st.markdown(f"**GENRE:**&nbsp;&nbsp; {movie_info['Genre']}")
-        st.markdown(f"**DIRECTOR:**&nbsp;&nbsp; {movie_info['Director']}")
+        st.markdown(f"### **:red[{movie_info['movie_title']}] ({movie_info['title_year']})**")
+        st.markdown(f"**GENRE:**&nbsp;&nbsp; {movie_info['genres']}")
+        st.markdown(f"**DIRECTOR:**&nbsp;&nbsp; {movie_info['director_name']}")
         st.markdown(f"**CASTS:**&nbsp;&nbsp; {movie_info['Casts']}")
-        st.markdown(f"**IMDB RATING:**&nbsp;&nbsp; {movie_info.get('IMDB_Rating', 'N/A')}")
-        st.markdown(f"**RUNTIME:**&nbsp;&nbsp; {movie_info['Runtime']}")
-        st.markdown(f"**RELEASED YEAR:**&nbsp;&nbsp; {movie_info.get('Released_Year', 'N/A')}")
+        st.markdown(f"**IMDB RATING:**&nbsp;&nbsp; {movie_info.get('imdb_score', 'N/A')}")
+        st.markdown(f"**RUNTIME:**&nbsp;&nbsp; {movie_info['duration']} min")
+        st.markdown(f"**CERTIFICATE:**&nbsp;&nbsp; {movie_info['content_rating']}")
+        st.markdown(f"**BOX OFFICE:**&nbsp;&nbsp; $ {movie_info.get('gross', 'N/A')}")
 
     st.write(" ")
     st.write(" ")
@@ -72,43 +156,226 @@ if st.button("Recommend"):
     st.write(" ")
     st.write(" ")
 
-    st.title(":red[Top Recommendations For You]")
-
-
-    def recommend(movie):
-        if movie not in Top_Recommendations['Series_Title'].values:
-            print("Movie not found in dataset. Please try another one.")
-            return []
-
-        movie_index = Top_Recommendations[Top_Recommendations['Series_Title'] == movie].index[0]
-        similarity_index = similarity[movie_index]
-        recommended_movies_list = sorted(list(enumerate(similarity_index)), reverse=True, key=lambda x: x[1])[1:6]
-
-        recommended = [Top_Recommendations.iloc[i[0]].Series_Title for i in recommended_movies_list]
-        return recommended
-
+    st.markdown("# **:red[Top Recommendations For You]**")
 
     recommendations = recommend(selected_movie_name)
 
     # Create 5 columns
     cols = st.columns(5)
 
-    # Display posters and movie titles
-    for i in range(5):
-        with cols[i]:
-            try:
-                poster_url = get_poster(recommendations[i])
-                if poster_url and poster_url != "N/A":
-                    st.markdown(
-                        f"""
-                        <div style="border: 2pt solid white; display: inline-block; width: 120px; height: 180px; overflow: hidden;">
-                            <img src="{poster_url}" style="width: 100%; height: 100%; object-fit: cover;" />
+    # Loop through columns and display each recommended movie
+    for idx, col in enumerate(cols):
+        with col:
+            movie = recommendations[idx]
+            if movie['poster'] and movie['poster'] != "N/A":
+                st.markdown(
+                    f"""
+                    <style>
+                    .hover-img {{
+                        transition: transform 0.3s ease;
+                        width: 120px;
+                        height: 180px;
+                        object-fit: cover;
+                        display: block;
+                    }}
+                    .hover-img:hover {{
+                        transform: scale(1.05);
+                    }}
+                    </style>
+
+                    <a href="{movie['link']}" target="_blank">
+                        <div class="img-container">
+                            <img src="{movie['poster']}" class="hover-img" />
                         </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
-                    st.caption(recommendations[i])  
-                else:
-                    st.warning("Poster not available.")
-            except IndexError:
-                st.warning("Less than 5 recommendations available.")
+                    </a>
+                    """,
+                    unsafe_allow_html=True
+                )
+                # Add movie title as caption
+                st.caption(movie['title'])
+
+
+    st.write(" ")
+    st.write(" ")
+    st.write(" ")
+    st.write(" ")
+
+
+    st.markdown(f"## **:red[Top Recommendations Directed By {movie_info['director_name']}]**")
+
+    def dir_recommend(movie):
+        if movie not in Top_Recommendations['movie_title'].values:
+            print("Movie not found in dataset. Please try another one.")
+            return []
+
+        movie_index = Top_Recommendations[Top_Recommendations['movie_title'] == movie].index[0]
+
+        # Get the selected movie's details
+        dir_movie_info = Top_Recommendations.loc[movie_index]
+
+        similarity_index = similarity[movie_index]
+
+        recommended_movies_list = sorted(list(enumerate(similarity_index)), reverse=True, key=lambda x: x[1])
+
+        # Filter for movies with the same director
+        dir_top_list = []
+        seen_titles = set()
+
+        for i in recommended_movies_list:
+            dir_idx = i[0]
+            movie_title = Top_Recommendations.iloc[dir_idx]['movie_title']
+
+            if (
+                    dir_idx != movie_index and
+                    Top_Recommendations.iloc[dir_idx]['director_name'] == dir_movie_info['director_name'] and
+                    movie_title != dir_movie_info['movie_title'] and
+                    movie_title not in seen_titles
+            ):
+                dir_top_list.append(dir_idx)
+                seen_titles.add(movie_title)
+
+            if len(dir_top_list) >= 6:
+                break
+
+        dir_recommended = []
+        for i in dir_top_list:
+            movie_title = Top_Recommendations.iloc[i].movie_title
+            imdb_link = Top_Recommendations.iloc[i].movie_imdb_link
+            poster_url = get_poster(movie_title)
+            dir_recommended.append({
+                "title": movie_title,
+                "link": imdb_link,
+                "poster": poster_url
+            })
+        return dir_recommended
+
+
+    dir_recommendations = dir_recommend(selected_movie_name)
+
+    # Create 5 columns
+    cols = st.columns(5)
+
+    for col, movie in zip(cols, dir_recommendations):
+        with col:
+            if movie['poster'] and movie['poster'] != "N/A":
+                st.markdown(
+                    f"""
+                    <style>
+                    .hover-img {{
+                        transition: transform 0.3s ease;
+                        width: 120px;
+                        height: 180px;
+                        object-fit: cover;
+                        display: block;
+                    }}
+                    .hover-img:hover {{
+                        transform: scale(1.05);
+                    }}
+                    </style>
+
+                    <a href="{movie['link']}" target="_blank">
+                        <div class="img-container">
+                            <img src="{movie['poster']}" class="hover-img" />
+                        </div>
+                    </a>
+                    """,
+                    unsafe_allow_html=True
+                )
+            st.caption(movie['title'])
+    st.write(" ")
+    st.write(" ")
+    st.write(" ")
+    st.write(" ")
+
+    # Get the selected movie's details
+    act_movie_info = None
+    if selected_movie_name != 'Select a movie...':
+        act_filtered = Top_Recommendations[Top_Recommendations['movie_title'] == selected_movie_name]
+        if not act_filtered.empty:
+            act_movie_info = act_filtered.iloc[0]
+
+            # Replace underscores with spaces in all string values
+            act_movie_info = act_movie_info.apply(lambda x: x.replace('_', ' ') if isinstance(x, str) else x)
+
+
+    st.markdown(f"## **:red[Top Recommendations From the Actor {act_movie_info['actor_1_name']}]**")
+
+    def act_recommend(movie):
+        if movie not in Top_Recommendations['movie_title'].values:
+            print("Movie not found in dataset. Please try another one.")
+            return []
+
+        movie_index = Top_Recommendations[Top_Recommendations['movie_title'] == movie].index[0]
+
+        # Get the selected movie's details
+        act_movie_info = Top_Recommendations.loc[movie_index]
+
+        similarity_index = similarity[movie_index]
+
+        recommended_movies_list = sorted(list(enumerate(similarity_index)), reverse=True, key=lambda x: x[1])
+
+        # Filter for movies with the same director
+        act_top_list = []
+        seen_titles = set()
+
+        for i in recommended_movies_list:
+            act_idx = i[0]
+            movie_title = Top_Recommendations.iloc[act_idx]['movie_title']
+
+            if (
+                    act_idx != movie_index and
+                    Top_Recommendations.iloc[act_idx]['actor_1_name'] == act_movie_info['actor_1_name'] and
+                    movie_title != act_movie_info['movie_title'] and
+                    movie_title not in seen_titles
+            ):
+                act_top_list.append(act_idx)
+                seen_titles.add(movie_title)
+
+            if len(act_top_list) >= 6:
+                break
+
+        act_recommended = []
+        for i in act_top_list:
+            movie_title = Top_Recommendations.iloc[i].movie_title
+            imdb_link = Top_Recommendations.iloc[i].movie_imdb_link
+            poster_url = get_poster(movie_title)
+            act_recommended.append({
+                "title": movie_title,
+                "link": imdb_link,
+                "poster": poster_url
+            })
+        return act_recommended
+
+
+    act_recommendations = act_recommend(selected_movie_name)
+
+    # Create 5 columns
+    cols = st.columns(5)
+
+    for col, movie in zip(cols, act_recommendations):
+        with col:
+            if movie['poster'] and movie['poster'] != "N/A":
+                st.markdown(
+                    f"""
+                    <style>
+                    .hover-img {{
+                        transition: transform 0.3s ease;
+                        width: 120px;
+                        height: 180px;
+                        object-fit: cover;
+                        display: block;
+                    }}
+                    .hover-img:hover {{
+                        transform: scale(1.05);
+                    }}
+                    </style>
+
+                    <a href="{movie['link']}" target="_blank">
+                        <div class="img-container">
+                            <img src="{movie['poster']}" class="hover-img" />
+                        </div>
+                    </a>
+                    """,
+                    unsafe_allow_html=True
+                )
+            st.caption(movie['title'])
