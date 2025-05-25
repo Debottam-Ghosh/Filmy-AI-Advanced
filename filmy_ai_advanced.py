@@ -56,7 +56,7 @@ def get_poster(title):
     # Correct raw GitHub link (ensure it's raw and publicly accessible)
     default_poster = "https://raw.githubusercontent.com/Debottam-Ghosh/Filmy-AI-Advanced/main/Poster%20Unavailable.png"
 
-    url = f"https://www.omdbapi.com/?t={title}&apikey={OMDB_API_KEY}"
+    url = f"http://www.omdbapi.com/?t={title}&apikey={OMDB_API_KEY}"
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -65,11 +65,6 @@ def get_poster(title):
         if poster and poster != "N/A":
             return poster
     return default_poster
-
-if st.button("Test OMDb API"):
-    test_title = "Inception"
-    poster = get_poster(test_title)
-    st.image(poster)
 
 
 if st.button("Recommend") and movie_info is not None:
