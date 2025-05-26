@@ -10,7 +10,7 @@ def add_bg_image():
         f"""
         <style>
         .stApp {{
-            background-image: url("https://raw.githubusercontent.com/Debottam-Ghosh/Filmy-AI-Advanced/main/Background%20Image%20Dark.jpg");
+            background-image: url("https://raw.githubusercontent.com/Debottam-Ghosh/Filmy-AI-Advanced/main/Dark%20Background%20Image.jpg");
             background-attachment: fixed;
             background-size: cover;
         }}
