@@ -148,7 +148,7 @@ if st.button("Recommend") and movie_info is not None:
             )
 
     with col2:
-        st.markdown(f"## **:rainbow[Movie Info]**")
+        st.markdown("## **:rainbow[Movie Info]**")
         st.markdown(f"#### **:red[{movie_info['movie_title']}] ({movie_info['title_year']})**")
         st.markdown(f"**GENRE:**&nbsp;&nbsp; {movie_info['genres']}")
         st.markdown(f"**DIRECTOR:**&nbsp;&nbsp; {movie_info['director_name']}")
