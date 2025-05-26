@@ -387,3 +387,19 @@ if st.button("Recommend") and movie_info is not None:
                     unsafe_allow_html=True
                 )
             st.caption(movie['title'])
+
+
+st.write(" ")
+st.write(" ")
+st.write(" ")
+st.write(" ")
+st.write(" ")
+st.write(" ")
+st.write(" ")
+st.write(" ")
+st.write(" ")
+
+st.markdown(
+    "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'>Developed by Debottam Ghosh</p>",
+    unsafe_allow_html=True
+)
