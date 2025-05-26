@@ -313,7 +313,7 @@ if st.button("Recommend") and movie_info is not None:
             act_movie_info = act_movie_info.apply(lambda x: x.replace('_', ' ') if isinstance(x, str) else x)
 
 
-    st.markdown(f"## **:red[Top Recommendations From the Actor {act_movie_info['actor_1_name']}]**")
+    st.markdown(f"## **:red[Top Recommendations From the Cast {act_movie_info['actor_1_name']}]**")
 
     def act_recommend(movie):
         if movie not in Top_Recommendations['movie_title'].values:
@@ -363,6 +363,12 @@ if st.button("Recommend") and movie_info is not None:
 
 
     act_recommendations = act_recommend(selected_movie_name)
+    
+    if not act_recommendations:
+        st.markdown(
+            "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'>No Recommendations From This Cast!</p>",
+            unsafe_allow_html=True
+        )
 
     # Create 5 columns
     cols = st.columns(5)
@@ -405,8 +411,13 @@ st.write(" ")
 st.write(" ")
 st.write(" ")
 st.write(" ")
+st.write(" ")
+st.write(" ")
+st.write(" ")
+st.write(" ")
 
 st.markdown(
-    "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'>Developed by Debottam Ghosh</p>",
+    "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'><Developed by/><br>Debottam Ghosh</p>",
     unsafe_allow_html=True
 )
+
