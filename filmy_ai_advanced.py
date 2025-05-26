@@ -4,6 +4,24 @@ import pandas as pd
 import requests
 from utils.file_loader import download_and_load_similarity
 
+# Add background image using raw GitHub URL
+def add_bg_image():
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("https://raw.githubusercontent.com/Debottam-Ghosh/Filmy-AI-Advanced/main/Background%20Image.jpg");
+            background-attachment: fixed;
+            background-size: cover;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+add_bg_image()
+
+
 # Load the movie_info DataFrame
 movies_info = pickle.load(open('movies_info.pkl', 'rb'))
 movies_info = pd.DataFrame(movies_info)
