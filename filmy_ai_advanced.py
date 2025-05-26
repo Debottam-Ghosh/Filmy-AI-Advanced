@@ -51,7 +51,7 @@ st.markdown(
 st.write(" ")
 
 st.markdown(
-    "<p style='color:#696969; font-size:35px; font-weight:bold;'>Choose the movie you like</p>",
+    "<p style='color:#808080; font-size:35px; font-weight:bold;'>Choose the movie you like</p>",
     unsafe_allow_html=True
 )
 
@@ -282,7 +282,7 @@ if st.button("Recommend") and movie_info is not None:
     
     if not dir_recommendations:
         st.markdown(
-            "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'>No Recommendations From This Director!</p>",
+            "<p style='color:#A9A9A9; font-size:45px; font-weight:bold;'>No Recommendations From This Director!</p>",
             unsafe_allow_html=True
         )
 
@@ -386,7 +386,7 @@ if st.button("Recommend") and movie_info is not None:
     
     if not act_recommendations:
         st.markdown(
-            "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'>No Recommendations From This Cast!</p>",
+            "<p style='color:#A9A9A9; font-size:45px; font-weight:bold;'>No Recommendations From This Cast!</p>",
             unsafe_allow_html=True
         )
 
@@ -437,7 +437,7 @@ st.write(" ")
 st.write(" ")
 
 st.markdown(
-    "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'>Developed by Debottam Ghosh</p>",
+    "<p style='color:#808080; font-size:45px; font-weight:bold;'>Developed by Debottam Ghosh</p>",
     unsafe_allow_html=True
 )
 
