@@ -278,7 +278,7 @@ if st.button("Recommend") and movie_info is not None:
     dir_recommendations = dir_recommend(selected_movie_name)
 
     if dir_recommendations:
-        st.markdown(f"## **:rainbow[Top Recommendations Directed By {dir_recommendations[0]['title']}]**")
+        st.markdown(f"## **:rainbow[Top Recommendations Directed By {movie_info['director_name']}]**")
 
         cols = st.columns(5)
         for col, movie in zip(cols, dir_recommendations):
