@@ -228,9 +228,7 @@ if st.button("Recommend") and movie_info is not None:
     st.write(" ")
     st.write(" ")
 
-
-    st.markdown(f"## **:rainbow[Top Recommendations Directed By {movie_info['director_name']}]**")
-
+    
     def dir_recommend(movie):
         if movie not in Top_Recommendations['movie_title'].values:
             print("Movie not found in dataset. Please try another one.")
@@ -279,44 +277,44 @@ if st.button("Recommend") and movie_info is not None:
 
 
     dir_recommendations = dir_recommend(selected_movie_name)
+
+
     
-    if not dir_recommendations:
-        st.markdown(
-            "<p style='color:#A9A9A9; font-size:45px; font-weight:bold;'>No Recommendations From This Director!</p>",
-            unsafe_allow_html=True
-        )
+    if dir_recommendations:
+        st.markdown(f"## **:rainbow[Top Recommendations Directed By {movie_info['director_name']}]**")
 
 
-    # Create 5 columns
-    cols = st.columns(5)
+        # Create 5 columns
+        cols = st.columns(5)
 
-    for col, movie in zip(cols, dir_recommendations):
-        with col:
-            if movie['poster'] and movie['poster'] != "N/A":
-                st.markdown(
-                    f"""
-                    <style>
-                    .hover-img {{
-                        transition: transform 0.3s ease;
-                        width: 120px;
-                        height: 180px;
-                        object-fit: cover;
-                        display: block;
-                    }}
-                    .hover-img:hover {{
-                        transform: scale(1.05);
-                    }}
-                    </style>
+        for col, movie in zip(cols, dir_recommendations):
+            with col:
+                if movie['poster'] and movie['poster'] != "N/A":
+                    st.markdown(
+                        f"""
+                        <style>
+                        .hover-img {{
+                            transition: transform 0.3s ease;
+                            width: 120px;
+                            height: 180px;
+                            object-fit: cover;
+                            display: block;
+                        }}
+                        .hover-img:hover {{
+                            transform: scale(1.05);
+                        }}
+                        </style>
 
-                    <a href="{movie['link']}" target="_blank">
-                        <div class="img-container">
-                            <img src="{movie['poster']}" class="hover-img" />
-                        </div>
-                    </a>
-                    """,
-                    unsafe_allow_html=True
-                )
-            st.caption(movie['title'])
+                        <a href="{movie['link']}" target="_blank">
+                            <div class="img-container">
+                                <img src="{movie['poster']}" class="hover-img" />
+                            </div>
+                        </a>
+                        """,
+                        unsafe_allow_html=True
+                    )
+                st.caption(movie['title'])
+                
     st.write(" ")
     st.write(" ")
     st.write(" ")
@@ -332,8 +330,6 @@ if st.button("Recommend") and movie_info is not None:
             # Replace underscores with spaces in all string values
             act_movie_info = act_movie_info.apply(lambda x: x.replace('_', ' ') if isinstance(x, str) else x)
 
-
-    st.markdown(f"## **:rainbow[Top Recommendations From the Cast {act_movie_info['actor_1_name']}]**")
 
     def act_recommend(movie):
         if movie not in Top_Recommendations['movie_title'].values:
@@ -384,42 +380,39 @@ if st.button("Recommend") and movie_info is not None:
 
     act_recommendations = act_recommend(selected_movie_name)
     
-    if not act_recommendations:
-        st.markdown(
-            "<p style='color:#A9A9A9; font-size:45px; font-weight:bold;'>No Recommendations From This Cast!</p>",
-            unsafe_allow_html=True
-        )
+    if act_recommendations:
+        st.markdown(f"## **:rainbow[Top Recommendations From the Cast {act_movie_info['actor_1_name']}]**")
 
-    # Create 5 columns
-    cols = st.columns(5)
+        # Create 5 columns
+        cols = st.columns(5)
 
-    for col, movie in zip(cols, act_recommendations):
-        with col:
-            if movie['poster'] and movie['poster'] != "N/A":
-                st.markdown(
-                    f"""
-                    <style>
-                    .hover-img {{
-                        transition: transform 0.3s ease;
-                        width: 120px;
-                        height: 180px;
-                        object-fit: cover;
-                        display: block;
-                    }}
-                    .hover-img:hover {{
-                        transform: scale(1.05);
-                    }}
-                    </style>
+        for col, movie in zip(cols, act_recommendations):
+            with col:
+                if movie['poster'] and movie['poster'] != "N/A":
+                    st.markdown(
+                        f"""
+                        <style>
+                        .hover-img {{
+                            transition: transform 0.3s ease;
+                            width: 120px;
+                            height: 180px;
+                            object-fit: cover;
+                            display: block;
+                        }}
+                        .hover-img:hover {{
+                            transform: scale(1.05);
+                        }}
+                        </style>
 
-                    <a href="{movie['link']}" target="_blank">
-                        <div class="img-container">
-                            <img src="{movie['poster']}" class="hover-img" />
-                        </div>
-                    </a>
-                    """,
-                    unsafe_allow_html=True
-                )
-            st.caption(movie['title'])
+                        <a href="{movie['link']}" target="_blank">
+                            <div class="img-container">
+                                <img src="{movie['poster']}" class="hover-img" />
+                            </div>
+                        </a>
+                        """,
+                        unsafe_allow_html=True
+                    )
+                st.caption(movie['title'])
 
 
 st.write(" ")
@@ -437,7 +430,7 @@ st.write(" ")
 st.write(" ")
 
 st.markdown(
-    "<p style='color:#808080; font-size:45px; font-weight:bold;'>Developed by Debottam Ghosh</p>",
+    "<p style='color:#696969; font-size:45px; font-weight:bold;'>Developed by Debottam Ghosh</p>",
     unsafe_allow_html=True
 )
 
