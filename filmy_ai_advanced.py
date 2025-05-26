@@ -2,8 +2,6 @@ import streamlit as st
 import pickle
 import pandas as pd
 import requests
-
-from cache_posters import OMDB_API_KEY
 from utils.file_loader import download_and_load_similarity
 
 # Load the movie_info DataFrame
