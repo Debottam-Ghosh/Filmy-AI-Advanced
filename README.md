@@ -3,7 +3,8 @@
 [![Streamlit App](https://img.shields.io/badge/Launch%20App-Click%20Here-brightgreen?style=for-the-badge)](https://filmy-ai-pro.streamlit.app/)
 
 Welcome to **Filmy AI Pro**, a smart and interactive movie recommendation app powered by content-based filtering and AI. Whether you're a film enthusiast or a casual viewer, Filmy AI Pro helps you discover movies similar to your favorites — by genre, cast, plot, and even director.
-
+<br>
+If you want to know starting to ending coding and my thought process, you may refer to the notebook file: 
 ---
 
 ## Features
@@ -51,3 +52,34 @@ The app uses a movie metadata dataset containing:
    ```bash
    git clone https://github.com/your-username/filmy-ai-pro.git
    cd filmy-ai-pro
+
+2. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+3. **Add your OMDb API Key**
+   ```bash
+   OMDB_API_KEY = "your_api_key_here"
+4. **Run the app**
+   ```bash
+   streamlit run app.py
+---
+
+## Features Coming Soon
+- TMDb/IMDb rating filters
+- Collaborative filtering integration
+- Language and country filters
+- Mobile-responsive UI
+
+---
+
+## Developer
+#### Debottam Ghosh
+M.Sc. in Mathematics from IIT Hyderabad
+Connect on LinkedIn
+
+---
+
+## Acknowledgments
+- OMDb API for poster and metadata
+- Streamlit for rapid web app development
+- The original IMDb dataset contributors
