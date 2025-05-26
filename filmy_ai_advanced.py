@@ -120,6 +120,8 @@ if st.button("Recommend") and movie_info is not None:
     # Get poster from OMDb
     poster_url = get_poster(selected_movie_name)
 
+    st.markdown("## **:rainbow[Movie Info]**")
+
     # Create two columns: left for poster, right for details
     col1, col2 = st.columns([1, 2])
 
@@ -148,7 +150,6 @@ if st.button("Recommend") and movie_info is not None:
             )
 
     with col2:
-        st.markdown("## **:rainbow[Movie Info]**")
         st.markdown(f"#### **:red[{movie_info['movie_title']}] ({movie_info['title_year']})**")
         st.markdown(f"**GENRE:**&nbsp;&nbsp; {movie_info['genres']}")
         st.markdown(f"**DIRECTOR:**&nbsp;&nbsp; {movie_info['director_name']}")
