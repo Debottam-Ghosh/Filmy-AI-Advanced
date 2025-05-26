@@ -2,9 +2,11 @@
 
 [![Streamlit App](https://img.shields.io/badge/Launch%20App-Click%20Here-brightgreen?style=for-the-badge)](https://filmy-ai-pro.streamlit.app/)
 
+<br>
 Welcome to **Filmy AI Pro**, a smart and interactive movie recommendation app powered by content-based filtering and AI. Whether you're a film enthusiast or a casual viewer, Filmy AI Pro helps you discover movies similar to your favorites — by genre, cast, plot, and even director.
 <br>
-If you want to know starting to ending coding and my thought process, you may refer to the notebook file: 
+<br>
+If you want to know starting to ending coding and my thought process, you may refer to the notebook file [Filmy AI Pro.ipynb](https://github.com/Debottam-Ghosh/Filmy-AI-Advanced/blob/4cee3bd7962b174a589fbf81464d94328a3e9ba8/Filmy%20AI%20Pro.ipynb)
 ---
 
 ## Features
