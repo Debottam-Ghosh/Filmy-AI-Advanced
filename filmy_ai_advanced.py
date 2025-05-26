@@ -275,42 +275,41 @@ if st.button("Recommend") and movie_info is not None:
             })
         return dir_recommended
 
+    dir_recommendations = dir_recommend(selected_movie_name)
 
-dir_recommendations = dir_recommend(selected_movie_name)
+    if dir_recommendations:
+        st.markdown(f"## **:rainbow[Top Recommendations Directed By {dir_recommendations[0]['title']}]**")
 
-if dir_recommendations:
-    st.markdown(f"## **:rainbow[Top Recommendations Directed By {dir_recommendations[0]['title']}]**")
+        cols = st.columns(5)
+        for col, movie in zip(cols, dir_recommendations):
+            with col:
+                if movie['poster'] and movie['poster'] != "N/A":
+                    st.markdown(
+                        f"""
+                        <style>
+                        .hover-img {{
+                            transition: transform 0.3s ease;
+                            width: 120px;
+                            height: 180px;
+                            object-fit: cover;
+                            display: block;
+                            border-radius: 10px;
+                        }}
+                        .hover-img:hover {{
+                            transform: scale(1.05);
+                        }}
+                        </style>
 
-    cols = st.columns(5)
-    for col, movie in zip(cols, dir_recommendations):
-        with col:
-            if movie['poster'] and movie['poster'] != "N/A":
-                st.markdown(
-                    f"""
-                    <style>
-                    .hover-img {{
-                        transition: transform 0.3s ease;
-                        width: 120px;
-                        height: 180px;
-                        object-fit: cover;
-                        display: block;
-                        border-radius: 10px;
-                    }}
-                    .hover-img:hover {{
-                        transform: scale(1.05);
-                    }}
-                    </style>
-
-                    <a href="{movie['link']}" target="_blank">
-                        <div class="img-container">
-                            <img src="{movie['poster']}" class="hover-img" />
-                        </div>
-                    </a>
-                    """,
-                    unsafe_allow_html=True
-                )
-            else:
-                st.caption(movie['title'])
+                        <a href="{movie['link']}" target="_blank">
+                            <div class="img-container">
+                                <img src="{movie['poster']}" class="hover-img" />
+                            </div>
+                        </a>
+                        """,
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.caption(movie['title'])
 
                 
     st.write(" ")
