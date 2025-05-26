@@ -51,7 +51,7 @@ st.markdown(
 st.write(" ")
 
 st.markdown(
-    "<p style='color:#808080; font-size:35px; font-weight:bold;'>Choose the movie you like</p>",
+    "<p style='color:#F5F5F5; font-size:35px; font-weight:bold;'>Choose the movie you like</p>",
     unsafe_allow_html=True
 )
 
