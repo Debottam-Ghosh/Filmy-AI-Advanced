@@ -245,13 +245,6 @@ if st.button("Recommend") and movie_info is not None:
             if len(dir_top_list) >= 6:
                 break
                 
-        if len(dir_top_list) == 0:
-        st.markdown(
-            "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'>No Recommendations From This Director!</p>",
-            unsafe_allow_html=True
-        )
-        return []
-
         dir_recommended = []
         for i in dir_top_list:
             movie_title = Top_Recommendations.iloc[i].movie_title
@@ -266,6 +259,13 @@ if st.button("Recommend") and movie_info is not None:
 
 
     dir_recommendations = dir_recommend(selected_movie_name)
+    
+    if not dir_recommendations:
+    st.markdown(
+        "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'>No Recommendations From This Director!</p>",
+        unsafe_allow_html=True
+    )
+
 
     # Create 5 columns
     cols = st.columns(5)
