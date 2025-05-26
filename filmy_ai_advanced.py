@@ -241,7 +241,13 @@ if st.button("Recommend") and movie_info is not None:
             ):
                 dir_top_list.append(dir_idx)
                 seen_titles.add(movie_title)
-
+                
+            if len(dir_top_list) == 0:
+                st.markdown(
+                    "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'>No Recommendations From This Director!</p>",
+                    unsafe_allow_html=True
+                )
+                
             if len(dir_top_list) >= 6:
                 break
 
