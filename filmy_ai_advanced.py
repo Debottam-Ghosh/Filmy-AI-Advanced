@@ -417,7 +417,7 @@ st.write(" ")
 st.write(" ")
 
 st.markdown(
-    "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'><Developed by/><br>Debottam Ghosh</p>",
+    "<p style='color:#3b3b3b; font-size:45px; font-weight:bold;'<Developed by <br> Debottam Ghosh</p>",
     unsafe_allow_html=True
 )
 
