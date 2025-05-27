@@ -72,7 +72,7 @@ if selected_movie_name != 'Select a movie...':
 
 # Function to get poster from OMDb
 def get_poster(title):
-    # Correct raw GitHub link (ensure it's raw and publicly accessible)
+    
     default_poster = "https://raw.githubusercontent.com/Debottam-Ghosh/Filmy-AI-Advanced/main/Poster%20Unavailable.png"
 
     url_1 = f"http://www.omdbapi.com/?t={title}&apikey={OMDB_API_KEY_1}"
@@ -92,6 +92,27 @@ def get_poster(title):
             return poster_2
     return default_poster
 
+
+
+# Function to get some more data from OMDb
+def get_awards(title):
+
+    url_1 = f"http://www.omdbapi.com/?t={title}&apikey={OMDB_API_KEY_1}"
+    url_2 = f"http://www.omdbapi.com/?t={title}&apikey={OMDB_API_KEY_2}"
+    response_1 = requests.get(url_1)
+    response_2 = requests.get(url_2)
+
+    if response_1.status_code == 200:
+        data_1 = response_1.json()
+        awards_1 = data_1.get('Awards')
+        if awards_1 and awards_1 != "N/A":
+            return awards_1
+    elif response_2.status_code == 200:
+        data_2 = response_2.json()
+        awards_2 = data_2.get('Awards')
+        if awards_2 and awards_2 != "N/A":
+            return awards_2
+    return "Got no awards or nominations!"
 
 if st.button("Recommend") and movie_info is not None:
     def recommend(movie):
@@ -176,6 +197,8 @@ if st.button("Recommend") and movie_info is not None:
         st.markdown(f"**RUNTIME:**&nbsp;&nbsp; {movie_info['duration']} min")
         st.markdown(f"**CERTIFICATE:**&nbsp;&nbsp; {movie_info['content_rating']}")
         st.markdown(f"**BOX OFFICE:**&nbsp;&nbsp; $ {movie_info.get('gross', 'N/A')}")
+        st.markdown(f"**AWARDS:**&nbsp;&nbsp; {get_awards(movie_info['movie_title'])}")
+
 
     st.write(" ")
     st.write(" ")
