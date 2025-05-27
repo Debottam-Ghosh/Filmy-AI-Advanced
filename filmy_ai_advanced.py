@@ -31,7 +31,7 @@ Top_Recommendations = pickle.load(open('Top_Recommendations.pkl', 'rb'))
 Top_Recommendations = pd.DataFrame(Top_Recommendations)
 
 # Download and load the similarity matrix from Google Drive
-file_id = '1yyZFiRDEHimsXP8H_WOBpLpTIfSRrVJ-'
+file_id = '1Jn2XUw592l2RF_wvbRqVFzbq0X1KEit7'
 similarity = download_and_load_similarity(file_id)
 
 # My OMDb API Key
