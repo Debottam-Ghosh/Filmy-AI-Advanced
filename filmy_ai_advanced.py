@@ -466,13 +466,13 @@ st.markdown("## 🌟 Rate this App")
 
 rating = st.radio(
     "How many stars would you give?",
-    options=[1, 2, 3, 4, 5],
-    format_func=lambda x: "★" * x,
+    options=["Select rating", "⭐", "⭐⭐", "⭐⭐⭐", "⭐⭐⭐⭐", "⭐⭐⭐⭐⭐"],
+    index=0,
     horizontal=True
 )
 
-if rating:
-    st.success("Thank you for your rating!")
+if rating != "Select rating":
+    st.success(f"Thank you! You selected {len(rating)} star(s).")
 
 st.write(" ")
 st.write(" ")
