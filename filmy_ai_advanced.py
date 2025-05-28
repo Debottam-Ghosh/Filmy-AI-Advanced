@@ -272,6 +272,11 @@ if st.button("Recommend") and movie_info is not None:
 
         for i in recommended_movies_list:
             dir_idx = i[0]
+
+            # Check if index is within bounds
+            if dir_idx >= len(Top_Recommendations):
+                continue
+                
             movie_title = Top_Recommendations.iloc[dir_idx]['movie_title']
 
             if (
