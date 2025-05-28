@@ -469,7 +469,7 @@ star_component = """
 .star-rating {
   direction: rtl;
   display: inline-flex;
-  font-size: 2rem;
+  font-size: 5rem;
 }
 .star-rating input[type="radio"] {
   display: none;
