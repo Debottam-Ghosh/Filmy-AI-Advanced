@@ -464,51 +464,15 @@ st.write(" ")
 
 st.markdown("## 🌟 Rate this App")
 
-star_component = """
-<style>
-.star-rating {
-  direction: rtl;
-  display: inline-flex;
-  font-size: 5rem;
-}
-.star-rating input[type="radio"] {
-  display: none;
-}
-.star-rating label {
-  color: #ddd;
-  cursor: pointer;
-}
-.star-rating input[type="radio"]:checked ~ label {
-  color: #ffc700;
-}
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-  color: #deb217;
-}
-</style>
+rating = st.radio(
+    "How many stars would you give?",
+    options=[1, 2, 3, 4, 5],
+    format_func=lambda x: "★" * x,
+    horizontal=True
+)
 
-<div class="star-rating">
-  <input type="radio" id="5-stars" name="rating" value="5"><label for="5-stars">★</label>
-  <input type="radio" id="4-stars" name="rating" value="4"><label for="4-stars">★</label>
-  <input type="radio" id="3-stars" name="rating" value="3"><label for="3-stars">★</label>
-  <input type="radio" id="2-stars" name="rating" value="2"><label for="2-stars">★</label>
-  <input type="radio" id="1-star"  name="rating" value="1"><label for="1-star">★</label>
-</div>
-
-<script>
-  const stars = document.querySelectorAll('.star-rating input');
-  stars.forEach(star => {
-    star.addEventListener('change', function() {
-      const value = this.value;
-      window.parent.postMessage({ type: 'star-rating', value: value }, '*');
-    });
-  });
-</script>
-"""
-
-# Display HTML star widget
-components.html(star_component, height=100)
-
+if rating:
+    st.success("Thank you for your rating!")
 
 st.write(" ")
 st.write(" ")
