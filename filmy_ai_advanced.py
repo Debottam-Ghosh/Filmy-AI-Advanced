@@ -460,11 +460,12 @@ st.write(" ")
 st.write(" ")
 
 
-
 sentiment_mapping = ["one", "two", "three", "four", "five"]
-selected = st.feedback("stars")
+selected = st.slider("Rate this app", 1, 5, 3)
+
 if selected is not None:
-    st.markdown(f"Thanks for your feedback!")
+    st.markdown(f"You selected **{sentiment_mapping[selected - 1]}** star(s).")
+
 
 
 st.write(" ")
