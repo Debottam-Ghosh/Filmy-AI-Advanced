@@ -458,6 +458,15 @@ st.write(" ")
 st.write(" ")
 st.write(" ")
 st.write(" ")
+
+
+
+sentiment_mapping = ["one", "two", "three", "four", "five"]
+selected = st.feedback("stars")
+if selected is not None:
+    st.markdown(f"Thanks for your feedback!")
+
+
 st.write(" ")
 st.write(" ")
 st.write(" ")
