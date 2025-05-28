@@ -207,7 +207,7 @@ if st.button("Recommend") and movie_info is not None:
     st.write(" ")
     st.write(" ")
 
-    st.markdown("# **:rainbow[Top Recommendations For You]**")
+    st.markdown("# **:rainbow[Films You May Like]**")
 
     recommendations = recommend(selected_movie_name)
 
