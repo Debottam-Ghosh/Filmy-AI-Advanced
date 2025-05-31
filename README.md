@@ -78,7 +78,7 @@ The app uses a movie metadata dataset containing:
 
 ## Developer
 #### Debottam Ghosh
-M.Sc. in Mathematics from IIT Hyderabad
+M.Sc. in Mathematics and Computing from IIT Hyderabad
 <br>
 Connect on [LinkedIn](https://www.linkedin.com/in/debottam-ghosh/)
 
